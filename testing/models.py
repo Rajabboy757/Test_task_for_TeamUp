@@ -1,6 +1,5 @@
 from django.db import models
 import datetime
-import os
 import base64
 
 
@@ -15,12 +14,6 @@ class Test(models.Model):
         number_generate = str(self.id).rjust(6, "0")
 
         self.login = base64.b32encode(bytes(number_generate, 'utf-8')).decode('utf-8').replace('=', '')
-
-    def set_result(self, key, result):
-        if key == 'IQ':
-            self.IQ_result = result
-        else:
-            self.EQ_result = result
 
     def set_time(self, key):
         if key == 'IQ':
