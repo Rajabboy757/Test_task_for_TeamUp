@@ -6,9 +6,9 @@ import base64
 class Test(models.Model):
     login = models.CharField(max_length=10, unique=True, blank=True, null=True)
     IQ_result = models.SmallIntegerField(blank=True, null=True)
-    IQ_test_pass_time = models.TimeField(blank=True, null=True)
+    IQ_test_pass_time = models.DateTimeField(blank=True, null=True)
     EQ_result = models.CharField(max_length=40, blank=True, null=True)
-    EQ_test_pass_time = models.TimeField(blank=True, null=True)
+    EQ_test_pass_time = models.DateTimeField(blank=True, null=True)
 
     def set_login(self):
         number_generate = str(self.id).rjust(6, "0")

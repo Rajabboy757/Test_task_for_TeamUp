@@ -4,10 +4,11 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from .models import Test
-from .serializers import IQTestSerializer, EQTestSerializer
+from .serializers import IQTestSerializer, EQTestSerializer, TestSerializer
 
 
 class CreateTest(generics.GenericAPIView):
+    serializer_class = TestSerializer
 
     def get(self, request):
         test = Test.objects.create()
@@ -48,3 +49,16 @@ class SetEQTestResult(generics.GenericAPIView):
         test.set_time('EQ')
         test.save()
         return Response({'message': 'result has been set succesfully'}, status=status.HTTP_200_OK)
+
+
+class GetAllResults(generics.GenericAPIView):
+    serializer_class = TestSerializer
+
+    def get(self, request, *args, **kwargs):
+        login = kwargs.get('login')
+        test = Test.objects.get(login=login)
+        res = self.serializer_class(test)
+        return Response(res.data, status=status.HTTP_200_OK)
+
+
+

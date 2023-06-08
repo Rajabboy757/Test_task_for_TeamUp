@@ -12,3 +12,9 @@ class EQTestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Test
         fields = ('login', 'EQ_result')
+
+
+class TestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Test
+        fields = '__all__'
