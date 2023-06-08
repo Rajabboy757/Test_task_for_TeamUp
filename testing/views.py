@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework import generics, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from .models import Test
-from .serializers import IQTestSerializer
+from .serializers import IQTestSerializer, EQTestSerializer
 
 
 class CreateTest(generics.GenericAPIView):
@@ -22,9 +23,28 @@ class SetIQTestResult(generics.GenericAPIView):
     def post(self, request):
         login = request.data.get('login')
         result = request.data.get('IQ_result')
-        print(login,result)
+
+        if result > 50 or result < 0:
+            raise ValidationError(
+                {
+                    'invalid': 'the IQ test result value must be between 0 and 50 additionally'
+                })
+
         test = Test.objects.get(login=login)
         test.IQ_result = result
         test.set_time('IQ')
+        test.save()
+        return Response({'message': 'result has been set succesfully'}, status=status.HTTP_200_OK)
+
+
+class SetEQTestResult(generics.GenericAPIView):
+    serializer_class = EQTestSerializer
+
+    def post(self, request):
+        login = request.data.get('login')
+        result = request.data.get('EQ_result')
+        test = Test.objects.get(login=login)
+        test.EQ_result = result
+        test.set_time('EQ')
         test.save()
         return Response({'message': 'result has been set succesfully'}, status=status.HTTP_200_OK)
